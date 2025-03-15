@@ -5,22 +5,39 @@ import numpy as np
 from PIL import ImageGrab
 import tkinter as tk
 from tkinter import ttk
-
-# print(pyautogui.mouseInfo())
+import win32api
+import win32con
 
 # Constants
 RUNESCAPE_WINDOW_TITLE = "RuneScape"
-HEAT_BAR_REGION = (1256, 679, 1305, 683)
-FURNACE_POSITION = (1337, 690)
-ANVIL_POSITION = (1280, 660)
-YELLOW_THRESHOLD = 10  # Percentage of yellow/orange pixels required to trigger a click
+HEAT_BAR_REGION = (1256, 679, 1305, 683) 
+FURNACE_POSITION = (1337, 690) 
+ANVIL_POSITION = (1280, 660) 
+YELLOW_THRESHOLD = 10  
 
 # Define the color range for yellow/orange in BGR format
-LOWER_YELLOW = np.array([0, 50, 100])  # Lower bound for yellow/orange
-UPPER_YELLOW = np.array([80, 255, 255])  # Upper bound for yellow/orange
+LOWER_YELLOW = np.array([0, 50, 100])  
+UPPER_YELLOW = np.array([80, 255, 255])
 
 # Global variables
 running = False
+
+def virtual_click(x, y):
+    """Simulate a mouse click at the specified coordinates without moving the physical cursor."""
+    # Save the current cursor position
+    original_pos = win32api.GetCursorPos()
+
+    # Move the cursor to the target position
+    win32api.SetCursorPos((x, y))
+
+    # Simulate a mouse click
+    win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN, x, y, 0, 0)  # Left button down
+    win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, x, y, 0, 0)  # Left button up
+
+    # Restore the original cursor position
+    win32api.SetCursorPos(original_pos)
+
+    print(f"Clicked at ({x}, {y})")
 
 def activate_runescape_window():
     """Activate the RuneScape window."""
@@ -59,12 +76,12 @@ def is_heat_bar_cooled(heat_bar_image):
 
 def click_furnace():
     """Click on the furnace."""
-    pyautogui.click(FURNACE_POSITION)
+    virtual_click(*FURNACE_POSITION)  # Use virtual click
     print("Clicked on the furnace!")
 
 def click_anvil():
     """Click on the anvil."""
-    pyautogui.click(ANVIL_POSITION)
+    virtual_click(*ANVIL_POSITION)  # Use virtual click
     print("Clicked on the anvil!")
 
 def update_gui():
