@@ -7,8 +7,6 @@ import win32con
 import random
 from PIL import Image, ImageChops
 
-# print(pyautogui.mouseInfo())
-
 # Constants
 RUNESCAPE_WINDOW_TITLE = "RuneScape"
 BANK = (1857, 577)
@@ -54,8 +52,6 @@ def virtual_click(x, y, right_click=False, move_delay=0.3, click_delay=0.1):
         time.sleep(2)
         win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, x, y, 0, 0)
 
-    # print(f"{'Right-clicked' if right_click else 'Clicked'} at ({x}, {y})")
-
 def activate_runescape_window():
     """Activate the RuneScape window."""
     try:
@@ -71,7 +67,6 @@ def click_bank():
     """Click the bank."""
     virtual_click(*BANK)
     time.sleep(3)
-    # take_screenshot(lambda: stop_prayer(start_button, stop_button))
 
 def prayer_loop():
     """Main loop for the prayer bot."""
