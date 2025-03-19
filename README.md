@@ -19,6 +19,8 @@ Rs bot for Python practice purpose.
 - [View Update](https://github.com/mikk369/RsBot/commit/6bb46c353df9faa0119cc6c3359163b2f416a292) 
 - Prayer training with ashes and bones selection in Fort Forinithry
 - [View Update](https://github.com/mikk369/RsBot/commit/bc2a38bb5668e79a2da97f016add47f027b273b8) 
+- Can train in bank with powder of burial, after powder runs out it logs user out.
+- [View Update](https://github.com/mikk369/RsBot/commit/58f84fb464c2c9987803daaa08665562d6704eb1) 
 
 ![Bug Fix](https://img.shields.io/badge/status-bugfix-red)
 
