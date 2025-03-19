@@ -7,6 +7,8 @@ import win32con
 import random
 from PIL import Image, ImageChops
 
+# print(pyautogui.mouseInfo())
+
 # Constants
 RUNESCAPE_WINDOW_TITLE = "RuneScape"
 BANK = (1857, 577)
@@ -149,7 +151,11 @@ def start_prayer(start_button, stop_button):
     start_button.config(state=tk.DISABLED)
     stop_button.config(state=tk.NORMAL)
 
-    threading.Thread(target=prayer_loop, daemon=True).start()
+    if bank_bury.get():
+        threading.Thread(target=bury_bones_in_bank, daemon=True).start()
+    else:
+        threading.Thread(target=prayer_loop, daemon=True).start()
+
     update_timer()
 
 def stop_prayer(start_button, stop_button):
@@ -172,7 +178,43 @@ def update_click_coordinates():
     elif bones_checkbox.get():
         print("Bones selected")
         selected_coords = OFFER_BONES
+    elif bank_bury.get():
+        print("burying in bank")
 
+def take_bank_preset():
+    """CLICK ON BANK"""
+    virtual_click(1276, 657)
+    time.sleep(2)
+    """CLICK ON PRESET"""
+    virtual_click(1435, 949)
+    time.sleep(2)
+    """HOLD DOWN BUTTON"""
+    pyautogui.keyDown('i')  # Press and hold "I"
+    time.sleep(17)
+    pyautogui.keyUp('i') 
+
+def bury_bones_in_bank():
+    """Burying bones in bank with buryal dust"""
+    global running, start_time
+    print("bury_bones_in_bank started")
+    
+    start_time = time.time()
+    duration = 26 * 60
+
+    while running:
+        elapsed_time = time.time() - start_time
+        
+        if elapsed_time >= duration:
+            """CLOSE_RS_WINDOW"""
+            virtual_click(2533, 12)
+            time.sleep(2)
+            """CLICK_YES"""
+            virtual_click(1325, 709)
+            print("Logging Out!!")
+            running = False
+            break
+    
+        take_bank_preset()
 
 # GUI Setup
 root = tk.Tk()
@@ -187,7 +229,8 @@ timer_label.pack(pady=5)
 
 # Checkbox variables
 ashes_checkbox = tk.BooleanVar(value=False) 
-bones_checkbox = tk.BooleanVar(value=False) 
+bones_checkbox = tk.BooleanVar(value=False)
+bank_bury = tk.BooleanVar(value=False)
 
 # Checkboxes
 checkbox1 = tk.Checkbutton(root, text="Offer Ashes", variable=ashes_checkbox, command=lambda: [bones_checkbox.set(False), update_click_coordinates()])
@@ -195,6 +238,9 @@ checkbox1.pack()
 
 checkbox2 = tk.Checkbutton(root, text="Offer Bones", variable=bones_checkbox, command=lambda: [ashes_checkbox.set(False), update_click_coordinates()])
 checkbox2.pack()
+
+checkbox3 = tk.Checkbutton(root, text="Bank Bury", variable=bank_bury, command=lambda: [ashes_checkbox.set(False), bones_checkbox.set(False)])
+checkbox3.pack()
 
 start_button = tk.Button(root, text="Start", command=lambda: start_prayer(start_button, stop_button))
 start_button.pack(pady=5)
